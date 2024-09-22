@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { getPost } from "../api/PostApi";
 import BasicCard from "./BasicCard";
 import MyCard from "./MyCard";
+import Form from "./Form";
 
 const Posts = () => {
   const [apiData, setApiData] = useState([]);
@@ -12,6 +13,10 @@ const Posts = () => {
     setApiData(res.data);
   };
 
+  const getCurrentPosts = (posts) => {
+    setApiData(posts)
+  };
+
   useEffect(() => {
     getPostData();
   }, []);
@@ -20,7 +25,8 @@ const Posts = () => {
   return( 
     <div >
         {/* <BasicCard apiData={apiData} /> */}
-        <MyCard apiData={apiData}/>
+        <Form />
+        <MyCard apiData={apiData} getCurrentPosts={getCurrentPosts}/>
 
     </div>
   )

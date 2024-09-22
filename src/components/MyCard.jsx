@@ -1,45 +1,47 @@
 import * as React from "react";
 import { Button } from "@mui/material";
+import { deletePost } from "../api/PostApi";
 
-const MyCard = ({ apiData }) => {
+const MyCard = ({ apiData, getCurrentPosts }) => {
+   
+   const handleDelete = async(id) => {
+    try{
+
+        const res = await deletePost(id);
+        if(res.status === 200){
+           const updatedPosts = apiData.filter((curPost) => curPost.id !== id);
+           console.log("updatedPosts",updatedPosts)
+           getCurrentPosts(updatedPosts)
+        }else{
+          console.log("failed to delete the Post", res.status)
+        }
+    }catch(error){
+        console.log("error catch in deletePost",error);
+    }
+   };
+
   return (
     <div
-    //   className="bg-black"
+      className="flex flex-wrap justify-center gap-1"
       style={{
-        width: "100%",
-        backgroundColor: 'GrayText',
-        display: "flex",
-        flexWrap: "wrap",
-    
+        backgroundColor: 'GrayText',      
       }}
     >
       {apiData?.map((item) => {
         return (
           <div
-            className="sm:w-80"
+           className="bg-white border-2 border-black rounded-lg p-3 flex flex-col justify-between w-full sm:w-[48%] md:w-[31%] lg:w-[23%]"
             key={item.id}
-            style={{
-              backgroundColor: "white",
-              width: "30%",
-              height:278,
-              borderWidth: 2,
-              borderColor:'black',
-              justifyContent: "space-around",
-              alignItems: 'center',
-              margin:5,
-            //   objectFit:'cover',
-              padding:5,
-              borderRadius:20,
-
-            }}
           >
+            <div className="flex-grow">
             <p className="font-bold">{item.id}</p>
-            <h3>{item.title}</h3>
-            <h6>{item.body}</h6>
-            <div style={{display:'flex', justifyContent:'space-evenly',  }}>
+            <h3 className="text-xs sm:text-base">{item.title}</h3>
+            <h6 className="text-xs sm:text-base">{item.body}</h6>
+            </div>
+            <div className="flex justify-evenly mt-3">
             <Button variant="outlined" style={{}}>Post</Button>
             <Button variant="outlined">Edit</Button>
-            <Button variant="outlined">Delete</Button>
+            <Button variant="outlined" onClick={() => handleDelete(item.id)}>Delete</Button>
             </div>
             
           </div>
