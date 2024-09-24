@@ -1,24 +1,58 @@
 import { Button } from "@mui/material";
-import Box from '@mui/material/Box';
-import TextField from '@mui/material/TextField';
-import { useState } from "react";
+import TextField from "@mui/material/TextField";
+import { useEffect, useState } from "react";
 
 
-const Form = () => {
-    const [addPost, setAddPost] = useState('');
-    const [updatePost, setUpdatePost] = useState('');
+const Form = ({getPostAdded, updatePost}) => {
+    
+  const [title, setTitle] = useState("");
+  const [descsript, setDescript] = useState("");
 
-//   const handleSubmit = () => {
+    const handleSubmit = () => {
+        const postAddedData = {
+            title : title,
+            body : descsript
+        };
+        getPostAdded(postAddedData);
+        // console.log("postAddedData in form",postAddedData)
+        setTitle('');
+        setDescript('');
+    }
 
-//   }
+    console.log("updatePost elem in form",updatePost.body);
 
-    return(
-        <div className="m-1">
-            <TextField value={addPost} onChange={(e) => setAddPost(e.target.value)} id="outlined-basic" label="Add Post" variant="outlined" />
-            <TextField value={updatePost} onChange={(e) => setUpdatePost(e.target.value)} id="outlined-basic" label="Update Post" variant="outlined" />
-            <Button >Submit</Button>       
-             </div>
-    )
+    useEffect(() => {
+      if(updatePost){
+        setTitle(updatePost.title);
+        setDescript(updatePost.body);
+      }else{
+        setTitle('');
+        setDescript('');
+      }
+    },[updatePost]);
+
+  return (
+    <div className=" flex w-full ">
+      <div className="flex mb-2 w-full justify-center items-center ">
+        <TextField
+          sx={{marginRight:2}}
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          id="outlined-basic"
+          label="title"
+          variant="outlined"
+        />
+        <TextField
+          value={descsript}
+          onChange={(e) => setDescript(e.target.value)}
+          id="outlined-basic"
+          label="Description"
+          variant="outlined"
+        />
+        <Button onClick={handleSubmit} className="ml-2" sx={{marginLeft:2}}>Submit</Button>
+      </div>
+    </div>
+  );
 };
 
 export default Form;

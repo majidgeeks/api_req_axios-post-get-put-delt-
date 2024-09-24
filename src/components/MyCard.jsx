@@ -1,8 +1,8 @@
-import * as React from "react";
+import React, {useState} from "react";
 import { Button } from "@mui/material";
 import { deletePost } from "../api/PostApi";
 
-const MyCard = ({ apiData, getCurrentPosts }) => {
+const MyCard = ({ apiData, getCurrentPosts, getUpdateElem }) => {
    
    const handleDelete = async(id) => {
     try{
@@ -10,7 +10,7 @@ const MyCard = ({ apiData, getCurrentPosts }) => {
         const res = await deletePost(id);
         if(res.status === 200){
            const updatedPosts = apiData.filter((curPost) => curPost.id !== id);
-           console.log("updatedPosts",updatedPosts)
+        //    console.log("updatedPosts",updatedPosts)
            getCurrentPosts(updatedPosts)
         }else{
           console.log("failed to delete the Post", res.status)
@@ -20,6 +20,15 @@ const MyCard = ({ apiData, getCurrentPosts }) => {
     }
    };
 
+   const handleUpdatePost = (curElm) => 
+    getUpdateElem(curElm)
+   }
+
+   React.useEffect(() => {
+
+   },[])
+
+//    console.log('apiData in my card',apiData)
   return (
     <div
       className="flex flex-wrap justify-center gap-1"
@@ -39,8 +48,9 @@ const MyCard = ({ apiData, getCurrentPosts }) => {
             <h6 className="text-xs sm:text-base">{item.body}</h6>
             </div>
             <div className="flex justify-evenly mt-3">
-            <Button variant="outlined" style={{}}>Post</Button>
-            <Button variant="outlined">Edit</Button>
+            {/* <Button variant="outlined" style={{}}>Post</Button> */}
+            <Button variant="outlined"
+             onClick={() => handleUpdatePost(item)}>Edit</Button>
             <Button variant="outlined" onClick={() => handleDelete(item.id)}>Delete</Button>
             </div>
             
