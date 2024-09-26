@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { addPost, getPost } from "../api/PostApi";
-// import BasicCard from "./BasicCard";
 import MyCard from "./MyCard";
 import Form from "./Form";
 
@@ -15,27 +14,26 @@ const Posts = () => {
   };
 
   const getCurrentPosts = (posts) => {
-    setApiData(posts)
+    setApiData(posts);
   };
 
-  const getPostAdded = async(post) => {
+  const getPostAdded = async (post) => {
     // console.log("get post added in posts.jsx", post)
-    try{
-
+    try {
       const res = await addPost(post);
       // console.log("response post added",res)
-      if(res.status === 201){
-        setApiData([...apiData, res.data] )
-      }else{
+      if (res.status === 201) {
+        setApiData([...apiData, res.data]);
+      } else {
         console.log("failed to add new post");
       }
-    }catch(error){
-      console.log('error in addding new post catch', error);
+    } catch (error) {
+      console.log("error in addding new post catch", error);
     }
   };
 
   const getUpdateElem = (curElm) => {
-      setUpdatePost(curElm);
+    setUpdatePost(curElm);
   };
 
   useEffect(() => {
@@ -43,17 +41,22 @@ const Posts = () => {
   }, []);
 
   // console.log("apidata in posts", apiData);
-  return( 
-    <div >
-        {/* <BasicCard apiData={apiData} /> */}
-        <Form getPostAdded={getPostAdded} updatePost={updatePost} />
-        <MyCard 
-        apiData={apiData} getCurrentPosts={getCurrentPosts}
+  return (
+    <div>
+      <Form
+        getPostAdded={getPostAdded}
+        updatePost={updatePost}
+        setUpdatePost={setUpdatePost}
+        apiData={apiData}
+        setApiData={setApiData}
+      />
+      <MyCard
+        apiData={apiData}
+        getCurrentPosts={getCurrentPosts}
         getUpdateElem={getUpdateElem}
-        />
-
+      />
     </div>
-  )
+  );
 };
 
 export default Posts;
